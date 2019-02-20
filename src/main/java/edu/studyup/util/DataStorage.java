@@ -2,7 +2,6 @@ package edu.studyup.util;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import edu.studyup.entity.Event;
 
 /***
@@ -13,6 +12,6 @@ import edu.studyup.entity.Event;
  * @author Shivani
  * 
  */
-public class DataStorage {
-	public static Map<Integer, Event> eventData = new HashMap<Integer, Event>();
+public final class DataStorage {
+	public static final Map<Integer, Event> eventData = new HashMap<Integer, Event>();
 }
