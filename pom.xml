@@ -17,14 +17,10 @@
 	<build>
 		<plugins>
             <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>3.1.3</version>
+                <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs-maven-plugin</artifactId> <version>3.1.10</version>
                 <dependencies>
-                    <dependency>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs</artifactId>
-                        <version>3.1.3</version>
+<!-- overwrite dependency on spotbugs if you want to specify the version of ˓→spotbugs -->
+                <dependency> <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs</artifactId> <version>3.1.11</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -86,16 +82,6 @@
 			</plugin>
 		</plugins>
 	</build>
-    <reporting>
-        <plugins>
-            <!-- SpotBugs -->
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>3.1.3</version>
-            </plugin>
-        </plugins>
-    </reporting>
 	<dependencies>
 		<dependency>
             <groupId>org.junit.platform</groupId>
