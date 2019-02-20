@@ -1,6 +1,5 @@
 package edu.studyup.serviceImpl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import edu.studyup.entity.Event;
@@ -57,6 +55,7 @@ class EventServiceImplTest {
 		
 		DataStorage.eventData.put(event.getEventID(), event);
 	}
+		
 
 	@AfterEach
 	void tearDown() throws Exception {
@@ -78,7 +77,7 @@ class EventServiceImplTest {
 		  });
 	}
 	
-	
+	// expected a throw with students size larger than 2
 	@Test
 	void testAddstudent_size_BadCase() throws StudyUpException {
 		int eventID = 1;
@@ -97,25 +96,10 @@ class EventServiceImplTest {
 			eventServiceImpl.addStudentToEvent(li, eventID);
 		});
 	}
-	// if students size is larger than 2 (maximal is 2)
-//	void testAddstudent_size_BadCase() throws StudyUpException {
-//		int eventID = 1;
-//		Student han = new Student();
-//		han.setFirstName("Meimei");
-//		han.setLastName("Han");
-//		han.setEmail("hm@email.com");
-//		han.setId(2);
-//		Student li = new Student();
-//		han.setFirstName("Bai");
-//		han.setLastName("Li");
-//		han.setEmail("lb@email.com");
-//		han.setId(3);
-//		eventServiceImpl.addStudentToEvent(li,eventID);
-//		assertTrue("Students size is larger than 2", DataStorage.eventData.get(eventID).getStudents().size() > 2);
-//	}
+
 	
 	@Test
-	// if students size is equal to 2 (maximal is 2)
+	// don't expect a throw with students size equal to 2
 	void testAddstudent_size_GoodCase() throws StudyUpException {
 		int eventID = 1;
 		Student han = new Student();
@@ -123,11 +107,46 @@ class EventServiceImplTest {
 		han.setLastName("Han");
 		han.setEmail("hm@email.com");
 		han.setId(2);
-		eventServiceImpl.addStudentToEvent(han,eventID);
+		//eventServiceImpl.addStudentToEvent(han,eventID);
+		//eventServiceImpl.addStudentToEvent(han,eventID);
+		System.out.println(DataStorage.eventData.get(eventID).getStudents().size());
 		Assertions.assertDoesNotThrow(()-> {
 			eventServiceImpl.addStudentToEvent(han, eventID);
 		});
 	}
+	
+		//Test if it throws exception if event == null
+	@Test
+	void testAddStudent_eventEqualnull() {
+		int eventID = 1;
+		Student han = new Student();
+		han.setFirstName("Meimei");
+		han.setLastName("Han");
+		han.setEmail("hm@email.com");
+		han.setId(2);
+		eventServiceImpl.deleteEvent(1);
+		Assertions.assertThrows(StudyUpException.class, () -> {
+			eventServiceImpl.addStudentToEvent(han,eventID);
+		  });
+	}
+	//Test if it still work if presentStudent == null
+	@Test
+	void testAddStudent_presentStudentEqualnull() {
+		Student han = new Student();
+		han.setFirstName("Meimei");
+		han.setLastName("Han");
+		han.setEmail("hm@email.com");
+		han.setId(2);
+		Event event = DataStorage.eventData.get(1);
+		event.setStudents(null);
+		Assertions.assertDoesNotThrow(() -> {
+			eventServiceImpl.addStudentToEvent(han,1);
+		  });
+	}
+	
+	
+	
+	
 	@Test
 	// test if delete is successful
 	void testDeleteEvents_GoodCase() {
@@ -137,82 +156,65 @@ class EventServiceImplTest {
 	}
 	
 	@Test
+	// test if pastEvent is retrieved as expected
 	void testPastEvents_GoodCase() {
-		
-		Student student = new Student();
-		student.setFirstName("h");
-		student.setLastName("t");
-		student.setEmail("ht@email.com");
-		student.setId(2);
-		
-		Event event2 = new Event();
-		event2.setEventID(2);
-		event2.setDate(new Date(2323223233L));
-		event2.setName("Event 2");
-		Location location = new Location(-122, 37);
-		event2.setLocation(location);
-		List<Student> eventStudents = new ArrayList<>();
-		eventStudents.add(student);
-		event2.setStudents(eventStudents);
-		
-		DataStorage.eventData.put(event2.getEventID(), event2);
-		
-		List<Event> pastEvent = new ArrayList<>();
-		pastEvent.add(event2);
-		assertEquals(pastEvent, eventServiceImpl.getPastEvents());
+		Event event = DataStorage.eventData.get(1);
+		Date myDate = new Date(421412412341241234L);
+		event.setDate(myDate);
+		int size = eventServiceImpl.getPastEvents().size();
+		assert(size == 0);
 	}
 	
 	@Test
-	void testUpdateEventName_NameLength_GoodCase_NameLengthGreaterThanTwenty() {
+	void testUpdateEventName_NameLengthGreaterThanTwenty_Not_expect_exception() {
 		Assertions.assertThrows(StudyUpException.class, () -> {
 			eventServiceImpl.updateEventName(1, "This name is too long for the function");
 		  });
 	}
-	@Test
-	void testUpdateEventName_NameLength_BadCase_NameLengthGreaterThanTwenty() {
+	/*@Test
+	void testUpdateEventName_NameLengthGreaterThanTwenty_Not_expect_exception() {
 		Assertions.assertDoesNotThrow(() -> {
 			eventServiceImpl.updateEventName(1, "This name is too long for the function");
 		  });
-	}
+	}*/
 	//Test if it throws exception when the length of the name is 20
 	@Test
-	void testUpdateEventName_NameLength_GoodCase_NameLengthEqualsToTwenty() {
+	void testUpdateEventName_NameLengthEqualsToTwenty_Not_Expect_Exception() {
 		Assertions.assertDoesNotThrow(() -> eventServiceImpl.updateEventName(1, "This is twenty words"));		
 	}
 	
-	@Test 
+	/*@Test 
 	void testUpdateEventName_NameLength_BadCase_NameLengthEqualsToTwenty() {
 		Assertions.assertThrows(StudyUpException.class, () -> {eventServiceImpl.updateEventName(1, "This is twenty words");});
-	}
+	}*/
 	//Test if it throws exception when the length of the name is 20		
 	@Test
-	void testUpdateEventName_NameLength_GoodCase_NameLengthLessThanTwenty() {
+	void testUpdateEventName_NameLengthLessThanTwenty_Not_Expect_Exception() {
 		Assertions.assertDoesNotThrow(() -> eventServiceImpl.updateEventName(1, "This is ten words"));		
 	}
 		
-	@Test
+	/*@Test
 	void testUpdateEventName_NameLength_BadCase_NameLengthLessThanTwenty() {
 		Assertions.assertThrows(StudyUpException.class, () -> {eventServiceImpl.updateEventName(1, "This is ten words");});
-	}
+	}*/
 		
 	//test if future event is active.	
 	@Test
-	void testGetActiveEvent_GoodCase() {
+	void testGetActiveEvent_future_Not_expect_exception() {
 		Date myDate = new Date(421412412341241234L);
+		Event event = DataStorage.eventData.get(1);
+		event.setDate(myDate);	
 		List<Event> activeEvents = eventServiceImpl.getActiveEvents();
-		activeEvents.get(0).setDate(myDate);
 		assert(activeEvents.size() == 1);
 	}
-
+	//test if past event is active
 	@Test
-	void testGetActiveEvent_BadCase() {
-		Date myDate = new Date(1L);
+	void testGetActiveEvent_past_Not_expect_exception() {
+		Date myDate = new Date(2L);
+		Event event = DataStorage.eventData.get(1);
+		event.setDate(myDate);	
 		List<Event> activeEvents = eventServiceImpl.getActiveEvents();
-		activeEvents.get(0).setDate(myDate);
 		assert(activeEvents.size() == 0);
-		/*for (int i = 0; i < activeEvents.size(); i++) {
-			assertTrue(activeEvents.get(i).getDate().compareTo(new Date()) >= 0);
-		}*/
 	}
 	
 	
