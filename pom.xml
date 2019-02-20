@@ -16,11 +16,24 @@
 	</properties>
 	<build>
 		<plugins>
+			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-site-plugin</artifactId>
+  				<version>3.7.1</version>
+			</plugin>
+			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-project-info-reports-plugin</artifactId>
+  				<version>3.0.0</version>
+			</plugin>
+
             <plugin>
-                <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs-maven-plugin</artifactId> <version>3.1.10</version>
+                <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs-maven-plugin</artifactId> 
+				<version>3.1.8</version>
                 <dependencies>
 <!-- overwrite dependency on spotbugs if you want to specify the version of ˓→spotbugs -->
-                <dependency> <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs</artifactId> <version>3.1.11</version>
+                <dependency> <groupId>com.github.spotbugs</groupId> <artifactId>spotbugs</artifactId> 
+				<version>3.1.8</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -138,4 +151,13 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	<reporting>
+        <plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>3.1.8</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
